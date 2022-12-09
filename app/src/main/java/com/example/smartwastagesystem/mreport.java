@@ -6,7 +6,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -16,17 +15,16 @@ import com.itextpdf.text.BaseColor;
 
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.victor.loading.book.BookLoading;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,13 +41,14 @@ import java.util.Date;
 
 public class mreport extends AppCompatActivity {
 
-    private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-    private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
-    private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-    private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+    private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+    private static final Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
+    private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+    private static final Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
     private Firebase mRef;
-    private FirebaseDatabase database;
+
+    private static int SPLASH_TIME_OUT = 4000;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -62,15 +61,30 @@ public class mreport extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_mreport);
 
         Button shareR = (Button) findViewById(R.id.buttonsharereport);
-        shareR.setEnabled(true);
+        shareR.setEnabled(false);
 
         BookLoading bl = (BookLoading) findViewById(R.id.bookloading);
         bl.start();
 
+        new Handler().postDelayed(new Runnable() {
 
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                // Start your app main activity
+                shareR.setEnabled(true);
+
+            }
+        }, SPLASH_TIME_OUT);
 
         shareR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,273 +100,400 @@ public class mreport extends AppCompatActivity {
 
 
         public void Report() {
-            try {
-            mRef = new Firebase("https://smart-waste-collection-s-7bccc-default-rtdb.firebaseio.com/number");
-                mRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue().toString();
+//            try {
+//            mRef = new Firebase("https://smart-waste-collection-ef779-default-rtdb.asia-southeast1.firebasedatabase.app/number");
+//                mRef.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        String value = dataSnapshot.getValue(String.class);
+//                        double finalValue = Double.parseDouble(value);
+//                        double val;
+//                        val = (1 - (finalValue / 30)) * 100;
+//
+//                        TextView tw = (TextView) findViewById(R.id.prcntg);
+//                        TextView l = (TextView) findViewById(R.id.loading);
+//                        BookLoading book = (BookLoading) findViewById(R.id.bookloading);
+//                        book.stop();
+//                        l.setText("");
+//                        tw.setText("Waste Report is Successfuly Generated ! \n Save in your Mobile Memory named WasteReport.pdf \n Please Share report with SWC Admin Thanks  ");
+//
+//
+//                        //create PDF
+//                        //create document object
+//                        //Document document = new Document();
+//
+//                        //output file path
+//                       // String outpath = Environment.getExternalStorageDirectory() + "/WasteReport.pdf";
+//                        String outpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+//                        File file = new File(outpath, "WasteReport.pdf");
+//
+//
+//                        try {
+//                            OutputStream outputStream = new FileOutputStream(file);
+//
+//                            // PdfWriter.getInstance(document, new FileOutputStream(outpath));
+//                            Document document = new Document();
+//                            PdfWriter.getInstance(document,outputStream);
+//                            document.open();
+//                            //meta data
+//                            document.addTitle("My first PDF");
+//                            document.addSubject("Using iText");
+//                            document.addKeywords("Java, PDF, iText");
+//                            document.addAuthor("Muhammad Javed Ramzan");
+//                            document.addCreator("Muhammad Javed Ramzan");
+//
+//                            //document titile page
+//                            Paragraph preface = new Paragraph();
+//                            // We add one empty line
+//                            addEmptyLine(preface, 1);
+//                            // Lets write a big header
+//                            preface.add(new Paragraph("Smart Waste Collection System", catFont));
+//                            preface.setAlignment(Element.ALIGN_CENTER);
+//
+//                            addEmptyLine(preface, 3);
+//                            // Will create: Report generated by: _name, _date
+//                            preface.add(new Paragraph("Report generated by: Smart Waste Collection System " + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//                                    smallBold));
+//                            addEmptyLine(preface, 2);
+//                            preface.add(new Paragraph("This document describe the waste percentage in all the bins. ",
+//                                    smallBold));
+//
+//                            addEmptyLine(preface, 2);
+//
+//                            preface.add(new Paragraph("This Document is Generated Automaticly with sensor value.and you must have to send the this doc to SWC Admintration between 8:00 PM -9:00 PM .Thank You. ;-).",
+//                                    redFont));
+//
+//
+//                            addEmptyLine(preface, 4);
+//
+//                            final PdfPTable table = new PdfPTable(4);
+//
+//
+//                            PdfPCell c1 = new PdfPCell(new Phrase("Date:"));
+//                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                            table.addCell(c1);
+//
+//                            c1 = new PdfPCell(new Phrase("Bin"));
+//                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                            table.addCell(c1);
+//
+//                            c1 = new PdfPCell(new Phrase("Waste Percentage"));
+//                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                            table.addCell(c1);
+//
+//
+//                            c1 = new PdfPCell(new Phrase("Location"));
+//                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                            table.addCell(c1);
+//
+//                            table.setHeaderRows(1);
+//
+//                            table.addCell(String.valueOf(new Date()));
+//                            table.addCell("Bin1");
+//                        //    table.addCell(String.valueOf(val) + "%");
+//                            table.addCell(val + "%");
+//
+//                            table.addCell("Comsats Wah cantt");
+//                            table.addCell(String.valueOf(new Date()));
+//                            table.addCell("Bin2");
+//                            table.addCell("85%");
+//                            table.addCell("POF Hospital");
+//
+//                            table.addCell(String.valueOf(new Date()));
+//                            table.addCell("Bin3");
+//                            table.addCell("40%");
+//                            table.addCell("Nawabad");
+//
+//
+//                            table.addCell(String.valueOf(new Date()));
+//                            table.addCell("Bin4");
+//                            table.addCell("60%");
+//                            table.addCell("New City");
+//                            document.add(preface);
+//                            document.add(table);
+//
+//                            document.close();
+//
+//
+//                        } catch (FileNotFoundException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        } catch (DocumentException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        }
+//
+//
+////                        Button shareR = (Button) findViewById(R.id.buttonsharereport);
+////                        shareR.setEnabled(true);
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(FirebaseError firebaseError) {
+//                        Toast.makeText(getApplicationContext(),"Fail to get data",Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//
+//
+//            }
+//
+//            catch (Exception er) {
+//                // er.printStackTrace();
+//                //       }
+//
+//
+//                TextView tw = (TextView) findViewById(R.id.prcntg);
+//                TextView l = (TextView) findViewById(R.id.loading);
+//                BookLoading book = (BookLoading) findViewById(R.id.bookloading);
+//                book.stop();
+//                l.setText("");
+//                tw.setText("Waste Report is Successfuly Generated ! \n Save in your Mobile Memory named WasteReport.pdf \n Please Share report with SWC Admin Thanks  ");
+//
+//
+//                //create PDF
+//                //create document object
+//
+//                //output file path
+//                String outpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+//                File file = new File(outpath, "WasteReport.pdf");
+//
+//
+//                try {
+//                    OutputStream outputStream = new FileOutputStream(file);
+//
+//                    // PdfWriter.getInstance(document, new FileOutputStream(outpath));
+//                    Document document = new Document();
+//                    PdfWriter.getInstance(document, outputStream);
+//
+//                    document.open();
+//                    //meta data
+//                    document.addTitle("My first PDF");
+//                    document.addSubject("Using iText");
+//                    document.addKeywords("Java, PDF, iText");
+//                    document.addAuthor("Muhammad Javed Ramzan");
+//                    document.addCreator("Muhammad Javed Ramzan");
+//
+//                    //document titile page
+//                    Paragraph preface = new Paragraph();
+//                    // We add one empty line
+//                    addEmptyLine(preface, 1);
+//                    // Lets write a big header
+//                    preface.add(new Paragraph("Smart Waste Collection System", catFont));
+//                    preface.setAlignment(Element.ALIGN_CENTER);
+//
+//                    addEmptyLine(preface, 3);
+//                    // Will create: Report generated by: _name, _date
+//                    preface.add(new Paragraph("Report generated by: Smart Waste Collection System " + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//                            smallBold));
+//                    addEmptyLine(preface, 2);
+//                    preface.add(new Paragraph("This document describe the waste percentage in all the bins. ",
+//                            smallBold));
+//
+//                    addEmptyLine(preface, 2);
+//
+//                    preface.add(new Paragraph("This Document is Generated Automaticly with sensor value.and you must have to send the this doc to SWC Admintration between 8:00 PM -9:00 PM .Thank You. ;-).",
+//                            redFont));
+//
+//
+//                    addEmptyLine(preface, 4);
+//
+//                    final PdfPTable table = new PdfPTable(4);
+//
+//
+//                    PdfPCell c1 = new PdfPCell(new Phrase("Date:"));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//                    c1 = new PdfPCell(new Phrase("Bin"));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//                    c1 = new PdfPCell(new Phrase("Waste Percentage"));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//
+//                    c1 = new PdfPCell(new Phrase("Location"));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//                    table.setHeaderRows(1);
+//
+//                    table.addCell(String.valueOf(new Date()));
+//                    table.addCell("Bin1");
+//                    table.addCell( "70%");
+//                    table.addCell("Prakash Nagar");
+//
+//                    table.addCell(String.valueOf(new Date()));
+//                    table.addCell("Bin2");
+//                    table.addCell("85%");
+//                    table.addCell("Prakash Nagar");
+//
+//                    table.addCell(String.valueOf(new Date()));
+//                    table.addCell("Bin3");
+//                    table.addCell("40%");
+//                    table.addCell("Arundelpet");
+//
+//
+//                    table.addCell(String.valueOf(new Date()));
+//                    table.addCell("Bin4");
+//                    table.addCell("60%");
+//                    table.addCell("Barampet");
+//
+//                    document.add(preface);
+//                    document.add(table);
+//                    document.close();
+//
+//
+//                } catch (FileNotFoundException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                } catch (DocumentException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//                er.printStackTrace();
+//            }
+//--------------------------------------------------------------------------------------------       LO
+            Log.d("firebase","firebase");
+            mRef = new Firebase("https://smart-waste-collection-ef779-default-rtdb.asia-southeast1.firebasedatabase.app/number");
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String value = dataSnapshot.getValue(String.class);
+                    double finalValue = Double.parseDouble(value);
+                    double val;
+                    val = (1 - (finalValue / 30)) * 100;
+
+                    TextView tw = (TextView) findViewById(R.id.prcntg);
+                    TextView l = (TextView) findViewById(R.id.loading);
+                    BookLoading book = (BookLoading) findViewById(R.id.bookloading);
+                    book.stop();
+                    l.setText("");
+                    tw.setText("Waste Report is Successfuly Generated ! \n Save in your Mobile Memory named WasteReport.pdf \n Please Share report with SWC Admin Thanks  ");
 
 
-                        Double finalValue = Double.parseDouble(value);
-                        Double val;
-                        val = (1 - (finalValue / 30)) * 100;
+                    //create PDF
+                    //create document object
+                    //Document document = new Document();
 
-                        TextView tw = (TextView) findViewById(R.id.prcntg);
-                        TextView l = (TextView) findViewById(R.id.loading);
-                        BookLoading book = (BookLoading) findViewById(R.id.bookloading);
-                        book.stop();
-                        l.setText("");
-                        tw.setText("Waste Report is Successfuly Generated ! \n Save in your Mobile Memory named WasteReport.pdf \n Please Share report with SWC Admin Thanks  ");
+                    //output file path
+                    // String outpath = Environment.getExternalStorageDirectory() + "/WasteReport.pdf";
+                    String outpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+                    File file = new File(outpath, "WasteReport.pdf");
 
 
-                        //create PDF
-                        //create document object
-                        //Document document = new Document();
+                    try {
+                        OutputStream outputStream = new FileOutputStream(file);
 
-                        //output file path
-                       // String outpath = Environment.getExternalStorageDirectory() + "/WasteReport.pdf";
-                        String outpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
-                        File file = new File(outpath, "WasteReport.pdf");
+                        // PdfWriter.getInstance(document, new FileOutputStream(outpath));
+                        Document document = new Document();
+                        PdfWriter.getInstance(document,outputStream);
+                        document.open();
+                        //meta data
+                        document.addTitle("My first PDF");
+                        document.addSubject("Using iText");
+                        document.addKeywords("Java, PDF, iText");
+                        document.addAuthor("Muhammad Javed Ramzan");
+                        document.addCreator("Muhammad Javed Ramzan");
 
+                        //document titile page
+                        Paragraph preface = new Paragraph();
+                        // We add one empty line
+                        addEmptyLine(preface, 1);
+                        // Lets write a big header
+                        preface.add(new Paragraph("Smart Waste Collection System", catFont));
+                        preface.setAlignment(Element.ALIGN_CENTER);
 
-                        try {
-                            OutputStream outputStream = new FileOutputStream(file);
+                        addEmptyLine(preface, 3);
+                        // Will create: Report generated by: _name, _date
+                        preface.add(new Paragraph("Report generated by: Smart Waste Collection System " + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                smallBold));
+                        addEmptyLine(preface, 2);
+                        preface.add(new Paragraph("This document describe the waste percentage in all the bins. ",
+                                smallBold));
 
-                            // PdfWriter.getInstance(document, new FileOutputStream(outpath));
-                            Document document = new Document();
-                            PdfWriter.getInstance(document,outputStream);
-                            document.open();
-                            //meta data
-                            document.addTitle("My first PDF");
-                            document.addSubject("Using iText");
-                            document.addKeywords("Java, PDF, iText");
-                            document.addAuthor("Muhammad Javed Ramzan");
-                            document.addCreator("Muhammad Javed Ramzan");
+                        addEmptyLine(preface, 2);
 
-                            //document titile page
-                            Paragraph preface = new Paragraph();
-                            // We add one empty line
-                            addEmptyLine(preface, 1);
-                            // Lets write a big header
-                            preface.add(new Paragraph("Smart Waste Collection System", catFont));
-                            preface.setAlignment(Element.ALIGN_CENTER);
-
-                            addEmptyLine(preface, 3);
-                            // Will create: Report generated by: _name, _date
-                            preface.add(new Paragraph("Report generated by: Smart Waste Collection System " + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                                    smallBold));
-                            addEmptyLine(preface, 2);
-                            preface.add(new Paragraph("This document describe the waste percentage in all the bins. ",
-                                    smallBold));
-
-                            addEmptyLine(preface, 2);
-
-                            preface.add(new Paragraph("This Document is Generated Automaticly with sensor value.and you must have to send the this doc to SWC Admintration between 8:00 PM -9:00 PM .Thank You. ;-).",
-                                    redFont));
+                        preface.add(new Paragraph("This Document is Generated Automaticly with sensor value.and you must have to send the this doc to SWC Admintration between 8:00 PM -9:00 PM .Thank You. ;-).",
+                                redFont));
 
 
-                            addEmptyLine(preface, 4);
+                        addEmptyLine(preface, 4);
 
-                            final PdfPTable table = new PdfPTable(4);
-
-
-                            PdfPCell c1 = new PdfPCell(new Phrase("Date:"));
-                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                            table.addCell(c1);
-
-                            c1 = new PdfPCell(new Phrase("Bin"));
-                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                            table.addCell(c1);
-
-                            c1 = new PdfPCell(new Phrase("Waste Percentage"));
-                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                            table.addCell(c1);
+                        final PdfPTable table = new PdfPTable(4);
 
 
-                            c1 = new PdfPCell(new Phrase("Location"));
-                            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                            table.addCell(c1);
+                        PdfPCell c1 = new PdfPCell(new Phrase("Date:"));
+                        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(c1);
 
-                            table.setHeaderRows(1);
+                        c1 = new PdfPCell(new Phrase("Bin"));
+                        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(c1);
 
-                            table.addCell(String.valueOf(new Date()));
-                            table.addCell("Bin1");
+                        c1 = new PdfPCell(new Phrase("Waste Percentage"));
+                        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(c1);
+
+
+                        c1 = new PdfPCell(new Phrase("Location"));
+                        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(c1);
+
+                        table.setHeaderRows(1);
+
+                        table.addCell(String.valueOf(new Date()));
+                        table.addCell("Bin1");
                         //    table.addCell(String.valueOf(val) + "%");
-                            table.addCell(val + "%");
+                        table.addCell(val + "%");
 
-                            table.addCell("Comsats Wah cantt");
-                            table.addCell(String.valueOf(new Date()));
-                            table.addCell("Bin2");
-                            table.addCell("85%");
-                            table.addCell("POF Hospital");
+                        table.addCell("Comsats Wah cantt");
+                        table.addCell(String.valueOf(new Date()));
+                        table.addCell("Bin2");
+                        table.addCell("85%");
+                        table.addCell("POF Hospital");
 
-                            table.addCell(String.valueOf(new Date()));
-                            table.addCell("Bin3");
-                            table.addCell("40%");
-                            table.addCell("Nawabad");
-
-
-                            table.addCell(String.valueOf(new Date()));
-                            table.addCell("Bin4");
-                            table.addCell("60%");
-                            table.addCell("New City");
-                            document.add(preface);
-                            document.add(table);
-
-                            document.close();
+                        table.addCell(String.valueOf(new Date()));
+                        table.addCell("Bin3");
+                        table.addCell("40%");
+                        table.addCell("Nawabad");
 
 
-                        } catch (FileNotFoundException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (DocumentException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        table.addCell(String.valueOf(new Date()));
+                        table.addCell("Bin4");
+                        table.addCell("60%");
+                        table.addCell("New City");
+                        document.add(preface);
+                        document.add(table);
+
+                        document.close();
+
+
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (DocumentException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
 
 
 //                        Button shareR = (Button) findViewById(R.id.buttonsharereport);
 //                        shareR.setEnabled(true);
 
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        Toast.makeText(getApplicationContext(),"Fail to get data",Toast.LENGTH_LONG).show();
-                    }
-                });
-
-
-            }
-
-            catch (Exception er) {
-                // er.printStackTrace();
-                //       }
-                database = FirebaseDatabase.getInstance("https://smart-waste-collection-s-7bccc-default-rtdb.firebaseio.com/");
-                DatabaseReference numRef = database.getReference("number");
-                String value = String.valueOf(numRef.get());
-
-                Double finalValue = Double.parseDouble(value);
-                Double val;
-                val = (1 - (finalValue / 30)) * 100;
-
-
-                TextView tw = (TextView) findViewById(R.id.prcntg);
-                TextView l = (TextView) findViewById(R.id.loading);
-                BookLoading book = (BookLoading) findViewById(R.id.bookloading);
-                book.stop();
-                l.setText("");
-                tw.setText("Waste Report is Successfuly Generated ! \n Save in your Mobile Memory named WasteReport.pdf \n Please Share report with SWC Admin Thanks  ");
-
-
-                //create PDF
-                //create document object
-
-                //output file path
-                String outpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
-                File file = new File(outpath, "WasteReport.pdf");
-
-
-                try {
-                    OutputStream outputStream = new FileOutputStream(file);
-
-                    // PdfWriter.getInstance(document, new FileOutputStream(outpath));
-                    Document document = new Document();
-                    PdfWriter.getInstance(document, outputStream);
-
-                    document.open();
-                    //meta data
-                    document.addTitle("My first PDF");
-                    document.addSubject("Using iText");
-                    document.addKeywords("Java, PDF, iText");
-                    document.addAuthor("Muhammad Javed Ramzan");
-                    document.addCreator("Muhammad Javed Ramzan");
-
-                    //document titile page
-                    Paragraph preface = new Paragraph();
-                    // We add one empty line
-                    addEmptyLine(preface, 1);
-                    // Lets write a big header
-                    preface.add(new Paragraph("Smart Waste Collection System", catFont));
-                    preface.setAlignment(Element.ALIGN_CENTER);
-
-                    addEmptyLine(preface, 3);
-                    // Will create: Report generated by: _name, _date
-                    preface.add(new Paragraph("Report generated by: Smart Waste Collection System " + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                            smallBold));
-                    addEmptyLine(preface, 2);
-                    preface.add(new Paragraph("This document describe the waste percentage in all the bins. ",
-                            smallBold));
-
-                    addEmptyLine(preface, 2);
-
-                    preface.add(new Paragraph("This Document is Generated Automaticly with sensor value.and you must have to send the this doc to SWC Admintration between 8:00 PM -9:00 PM .Thank You. ;-).",
-                            redFont));
-
-
-                    addEmptyLine(preface, 4);
-
-                    final PdfPTable table = new PdfPTable(4);
-
-
-                    PdfPCell c1 = new PdfPCell(new Phrase("Date:"));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-                    c1 = new PdfPCell(new Phrase("Bin"));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-                    c1 = new PdfPCell(new Phrase("Waste Percentage"));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-
-                    c1 = new PdfPCell(new Phrase("Location"));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-                    table.setHeaderRows(1);
-
-                    table.addCell(String.valueOf(new Date()));
-                    table.addCell("Bin1");
-                    table.addCell(val+ "%");
-                    table.addCell("Prakash Nagar");
-
-                    table.addCell(String.valueOf(new Date()));
-                    table.addCell("Bin2");
-                    table.addCell("85%");
-                    table.addCell("Prakash Nagar");
-
-                    table.addCell(String.valueOf(new Date()));
-                    table.addCell("Bin3");
-                    table.addCell("40%");
-                    table.addCell("Arundelpet");
-
-
-                    table.addCell(String.valueOf(new Date()));
-                    table.addCell("Bin4");
-                    table.addCell("60%");
-                    table.addCell("Barampet");
-
-                    document.add(preface);
-                    document.add(table);
-                    document.close();
-
-
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (DocumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
-                er.printStackTrace();
-            }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Toast.makeText(getApplicationContext(),"Fail to get data",Toast.LENGTH_LONG).show();
+                }
+            });
 
 
-    }
+
+        }
 
     private void addEmptyLine (Paragraph paragraph,int number){
         for (int i = 0; i < number; i++) {

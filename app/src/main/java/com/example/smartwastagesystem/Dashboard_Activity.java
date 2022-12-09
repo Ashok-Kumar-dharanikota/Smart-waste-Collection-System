@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import ss.com.bannerslider.banners.Banner;
 import ss.com.bannerslider.banners.DrawableBanner;
 import ss.com.bannerslider.views.BannerSlider;
@@ -36,61 +35,6 @@ public class Dashboard_Activity extends AppCompatActivity {
         banners.add(new DrawableBanner(R.drawable.slider_9));
         bannerSlider.setBanners(banners);
 
-//        CircleImageView collection_button = (CircleImageView) findViewById(R.id.collection_profile_image);
-//        CircleImageView report_button = (CircleImageView) findViewById(R.id.Report_profile_Image);
-//        CircleImageView analytics_button = (CircleImageView) findViewById(R.id.record_image_profile);
-//        CircleImageView alerts_button = (CircleImageView) findViewById(R.id.alert_profile_image);
-//        CircleImageView contact_button = (CircleImageView) findViewById(R.id.contact_profile_picture);
-//        CircleImageView profile_button = (CircleImageView) findViewById(R.id.profile_picture);
-//
-//        collection_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mcollection.class);
-//                startActivity(d);
-//            }
-//        });
-//
-//        report_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mreport.class);
-//                startActivity(d);
-//            }
-//        });
-//
-//        analytics_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mreport.class);
-//                startActivity(d);
-//            }
-//        });
-//
-//        alerts_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mreport.class);
-//                startActivity(d);
-//            }
-//        });
-//
-//        contact_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mreport.class);
-//                startActivity(d);
-//            }
-//        });
-//
-//        profile_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent d=new Intent(Dashboard_Activity.this,mreport.class);
-//                startActivity(d);
-//            }
-//        });
-//
 
 
     }
@@ -127,15 +71,15 @@ public class Dashboard_Activity extends AppCompatActivity {
         startActivity(i);
     }
 
-//    public void howto(View view) {
-//        Intent i=new Intent(HomeScreen.this,howto.class);
-//        startActivity(i);
-//    }
+    public void howto(View view) {
+        Intent i=new Intent(Dashboard_Activity.this,howto.class);
+        startActivity(i);
+    }
 
-//    public void about(View view) {
-//        Intent i=new Intent(Dashboard_Activity.this,About.class);
-//        startActivity(i);
-//    }
+    public void about(View view) {
+        Intent i=new Intent(Dashboard_Activity.this,About.class);
+        startActivity(i);
+    }
 
 }
 

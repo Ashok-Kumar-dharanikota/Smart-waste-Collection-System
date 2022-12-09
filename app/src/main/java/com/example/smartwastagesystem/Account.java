@@ -115,9 +115,10 @@ public class Account extends AppCompatActivity {
 
 
         //firebase
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setTitle(getString(R.string.app_name));
 //        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.app_name));
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();

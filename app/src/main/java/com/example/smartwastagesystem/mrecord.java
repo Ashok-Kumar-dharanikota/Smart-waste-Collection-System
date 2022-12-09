@@ -54,12 +54,14 @@ public class mrecord extends AppCompatActivity {
 
 
         // Connect to ThinkSpeak Channel433450
+        // Connect to ThinkSpeak Channel 9
         tsChannel = new ThingSpeakChannel(1970089);
         // Set listener for Channel feed update events
         tsChannel.setChannelFeedUpdateListener(new ThingSpeakChannel.ChannelFeedUpdateListener() {
             @Override
             public void onChannelFeedUpdated(long channelId, String channelName, ChannelFeed channelFeed) {
                 // Show Channel ID and name on the Action Bar
+
                 getSupportActionBar().setTitle(channelName);
                 getSupportActionBar().setSubtitle("Channel " + channelId);
                 // Notify last update time of the Channel feed through a Toast message
@@ -76,14 +78,13 @@ public class mrecord extends AppCompatActivity {
 
         // Configure LineChartView
         chartView = findViewById(R.id.chart);
-        chartView.setZoomEnabled(false);
+        chartView.setZoomEnabled(true);
         chartView.setValueSelectionEnabled(true);
 
-        // Create a line chart from Field1 of ThinkSpeak Channel
-        //481636
-        tsChart = new ThingSpeakLineChart(1970089, 1);
+        // Create a line chart from Field1 of ThinkSpeak Channel 9
+        tsChart = new ThingSpeakLineChart(9, 1);
         // Get 200 entries at maximum
-        tsChart.setNumberOfEntries(100);
+        tsChart.setNumberOfEntries(200);
         // Set value axis labels on 10-unit interval
         tsChart.setValueAxisLabelInterval(10);
         // Set date axis labels on 5-minute interval
@@ -97,7 +98,7 @@ public class mrecord extends AppCompatActivity {
         // Set the starting date (5 minutes ago) for the default viewport of the chart
         tsChart.setChartStartDate(calendar.getTime());
         // Set listener for chart data update
-        tsChart.setListener(new ThingSpeakLineChart.ChartDataUpdateListener() {
+        tsChart.setListener(new  ThingSpeakLineChart.ChartDataUpdateListener() {
             @Override
             public void onChartDataUpdated(long channelId, int fieldId, String title, LineChartData lineChartData, Viewport maxViewport, Viewport initialViewport) {
                 // Set chart data to the LineChartView
@@ -113,38 +114,36 @@ public class mrecord extends AppCompatActivity {
 
 
         //menu
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.myFAB);
-        final FanMenuButtons sub = (FanMenuButtons) findViewById(R.id.myFABSubmenu);
+        final FloatingActionButton fab = findViewById(R.id.myFAB1);
+        final FanMenuButtons sub = findViewById(R.id.myFABSubmenu1);
         if (sub != null) {
-            sub.setOnFanButtonClickListener(new FanMenuButtons.OnFanClickListener() {
-                @Override
-                public void onFanButtonClicked(int index) {
+            sub.setOnFanButtonClickListener(index -> {
 
-                    //its run on behaf of index value
-                    if (index==0){
-                        Intent acc= new Intent(mrecord.this, Account.class);
-                        startActivity(acc);
-                    }
-                    else if(index==1){
-                        Intent col= new Intent(mrecord.this,mcollection.class);
-                        startActivity(col);
-                    }
-                    else if(index==2){
-                        Intent rec = new Intent(mrecord.this,mrecord.class);
-                        startActivity(rec);
-                    }
-                    else if (index==3) {
-                        Intent  report = new Intent(mrecord.this, mreport.class);
-                        startActivity(report);
-                    }
-                    else if (index==4){
-                        Intent alert = new Intent(mrecord.this,malert.class);
-                        startActivity(alert);
-                    }
-                    else if (index==5){
-                        Intent contact = new Intent(mrecord.this , Contact.class);
-                        startActivity(contact);
-                    }
+                //its run on behaf of index value
+                if (index==0){
+                    Intent acc= new Intent(mrecord.this, Account.class);
+                    startActivity(acc);
+                }
+                else if(index==1){
+                    Intent col= new Intent(mrecord.this,mcollection.class);
+                    startActivity(col);
+                }
+                else if(index==2){
+                    Intent rec = new Intent(mrecord.this,mrecord.class);
+                    startActivity(rec);
+                }
+                else if (index==3) {
+                    Intent  report = new Intent(mrecord.this, mreport.class);
+                    startActivity(report);
+                }
+                else if (index==4){
+                    Intent alert = new Intent(mrecord.this,malert.class);
+                    startActivity(alert);
+                }
+                else if (index==5){
+                    Intent contact = new Intent(mrecord.this , Contact.class);
+                    startActivity(contact);
+                }
 //                    else if (index==6) {
 //                        Intent abt= new Intent(mrecord.this , About.class);
 //                        startActivity(abt);
@@ -154,16 +153,10 @@ public class mrecord extends AppCompatActivity {
 //                        startActivity(how);
 //                    }
 
-                }
             });
 
             if (fab != null) {
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sub.toggleShow();
-                    }
-                });
+                fab.setOnClickListener(v -> sub.toggleShow());
             }
         }
     }

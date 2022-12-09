@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,25 +10,25 @@
     android:background="@drawable/bg"
     tools:context=".Account">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Widget.Design.AppBarLayout"
-        android:elevation="0dp">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/Widget.Design.AppBarLayout"-->
+<!--        android:elevation="0dp">-->
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/Widget.AppCompat.PopupMenu.Overflow">
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="?attr/colorPrimaryDark"-->
+<!--            app:layout_scrollFlags="scroll|enterAlways"-->
+<!--            app:popupTheme="@style/Widget.AppCompat.PopupMenu.Overflow">-->
 
-        </androidx.appcompat.widget.Toolbar>
+<!--        </androidx.appcompat.widget.Toolbar>-->
 
 
 
-</com.google.android.material.appbar.AppBarLayout>
+<!--</com.google.android.material.appbar.AppBarLayout>-->
 
 
 <LinearLayout
@@ -64,7 +65,6 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="@string/hint_password"
-            android:imeActionId="@+id/login"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
@@ -76,7 +76,6 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="@string/new_pass"
-            android:imeActionId="@+id/login"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
@@ -197,9 +196,38 @@
 
     </LinearLayout>
 
+    <com.bcgdv.asia.lib.fanmenu.FanMenuButtons
+        android:background="#CCFFFFFF"
+        android:id="@+id/myFABSubmenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:paddingRight="@dimen/fab_submenu_margin_right"
+        android:paddingBottom="@dimen/fab_submenu_margin_bottom"
+        android:textSize="14sp"
+        app:fanMenuLabels="@array/fan_labels"
+        app:fanButtonColors="@array/button_colors"
+        app:fanLeftDrawable="@array/button_icons"
+        app:fanRememberMovedPosition="true"
+        app:fanMinBounceBackAngle="-30"
+        app:fanMaxBounceBackAngle="50"
+        android:visibility="invisible"
+        app:elevation="4dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/myFAB"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin_right"
+        android:src="@android:drawable/btn_star_big_off"
+        app:elevation="4dp" />
 
 
 
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+</RelativeLayout>

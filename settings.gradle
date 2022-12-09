@@ -5,7 +5,8 @@ pluginManagement {
         mavenCentral()
         maven {
             url ("https://jcenter.bintray.com")
-        }
+            }
+//        maven { url("https://tallygo.bintray.com/TallyGoAndroid") }
     }
 
 }
@@ -19,7 +20,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             url ("https://jcenter.bintray.com")
-        }
+            }
+        maven { url "https://tallygo.bintray.com/TallyGoAndroid" }
     }
 }
 rootProject.name = "Smart wastage System"

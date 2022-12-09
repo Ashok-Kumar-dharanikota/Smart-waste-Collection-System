@@ -60,16 +60,13 @@ public class malert extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_alert);
 
+        context = getApplicationContext();
 
 
-
-        mRef = new Firebase("https://smart-waste-collection-s-7bccc-default-rtdb.firebaseio.com/number");
+        mRef = new Firebase("https://smart-waste-collection-ef779-default-rtdb.asia-southeast1.firebasedatabase.app/number");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-
                 String value= dataSnapshot.getValue().toString();
                 // int valu = (500 / value)*100;
 
@@ -147,7 +144,7 @@ public class malert extends AppCompatActivity {
 
 
 
-        context = getApplicationContext();
+
 
 
 
