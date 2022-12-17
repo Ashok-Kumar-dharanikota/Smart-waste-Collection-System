@@ -122,6 +122,13 @@
             android:name=".Dashboard_Activity"
             android:label="Dashboard" />
 
+        <activity
+            android:name=".map_single_collection"
+            android:label="single_collection"/>
+
+        <activity
+            android:name=".Activity_Maps"
+            android:label="activity_map"/>
 
         <activity
             android:name=".howto"

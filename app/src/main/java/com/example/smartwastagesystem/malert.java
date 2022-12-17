@@ -105,7 +105,7 @@ public class malert extends AppCompatActivity {
 
                     textview.setLayoutParams(layoutparams);
 
-                    textview.setText("Wastage level of Bin 1 Reach:" + val + "%" + "please Collect the garbage immediately.");
+                    textview.setText("Wastage level of Bin 1 Reach:" + finalValue + "%" + "please Collect the garbage immediately.");
 
                     textview.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
 

@@ -1,6 +1,7 @@
 package com.example.smartwastagesystem;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -49,14 +50,14 @@ public class mcollection extends AppCompatActivity {
                         Intent contact = new Intent(mcollection.this , Contact.class);
                         startActivity(contact);
                     }
-//                    else if (index==6) {
-//                        Intent abt= new Intent(mcollection.this , About.class);
-//                        startActivity(abt);
-//                    }
-//                    else if (index==7){
-//                        Intent how = new Intent( mcollection.this , howto.class );
-//                        startActivity(how);
-//                    }
+                    else if (index==6) {
+                        Intent abt= new Intent(mcollection.this , About.class);
+                        startActivity(abt);
+                    }
+                    else if (index==7){
+                        Intent how = new Intent( mcollection.this , howto.class );
+                        startActivity(how);
+                    }
 
                 }
             });
@@ -70,6 +71,21 @@ public class mcollection extends AppCompatActivity {
                 });
             }
         }
+    }
+
+
+    public void singlecollection(View view) {
+        Intent j=new Intent(mcollection.this,map_single_collection.class);
+        startActivity(j);
+    }
+
+    public void multicollection(View view) {
+        Intent mapopen = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.in/maps/dir/prakash nagar,narasaraopet/Eswar college of Engineering,kesanupalli/16.231506, 80.068167"));
+        mapopen.setPackage("com.google.android.apps.maps");
+        if(mapopen.resolveActivity(getPackageManager())!=null){
+            startActivity(mapopen);
+        }
+
     }
 
     }
