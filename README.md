@@ -4,6 +4,13 @@
 
 This project addresses inefficiencies in traditional waste management systems by introducing an IoT-based Smart Waste Management System. The solution combines an Android mobile application built using Java and XML, Firebase as a backend, and hardware components such as Arduino UNO, ultrasonic sensor, lights, and a Wi-Fi module. The project is initiated and written by Ashok Kumar.
 
+## Images
+
+| One | Two | Three | Four |
+| --- | --- | ----- | ---- |
+| ![One](images/one.png) | ![Two](images/two.png) | ![Three](images/three.png) | ![Four](images/four.png) |
+
+
 ### Problem Statement
 
 Traditional waste management systems often suffer from overflowing dustbins, inefficient route planning, and lack of real-time monitoring. The proposed system leverages IoT technology to overcome these challenges, ensuring timely waste collection, reducing fuel consumption, and providing a platform for community engagement.
